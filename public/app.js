@@ -31,6 +31,7 @@ jQuery(function($){
             IO.socket.on('hostCheckAnswer', IO.hostCheckAnswer);
             IO.socket.on('gameOver', IO.gameOver);
             IO.socket.on('error', IO.error );
+            IO.socket.on('markAnswerAsWrong', IO.onMarkAnswerAsWrong);
         },
 
         /**
@@ -79,6 +80,8 @@ jQuery(function($){
         onNewWordData : function(data) {
             // Update the current round
             App.currentRound = data.round;
+            // App.currentExpr = data.string;
+            App.wrongCount = 0;
 
             // Change the word for the Host and Player
             App[App.myRole].newWord(data);
@@ -91,6 +94,39 @@ jQuery(function($){
         hostCheckAnswer : function(data) {
             if(App.myRole === 'Host') {
                 App.Host.checkAnswer(data);
+            }
+        },
+
+        saveRecord : function(data) {
+            var parsedData = {
+                answer: data.answer,
+                expression: data.string 
+            };
+
+            $.ajax({
+                url: "/save",
+                contentType: "application/json",
+                type: "POST",
+                data: JSON.stringify(parsedData),
+                error: function (resp) {
+                    console.log(resp);
+                },
+                success: function (resp) {
+                    console.log(resp);
+                }
+            });
+        },
+
+        onMarkAnswerAsWrong : function(data) {
+            if (App.myRole === 'Player' && data.playerId === App.mySocketId) {
+                App.Player.markAnswerAsWrong(data);
+            } else if (App.myRole === 'Host') {
+                App.wrongCount += 1;
+                //console.log(data, App.wrongCount);
+                if (App.wrongCount === 3) {
+                    console.log('Count is 3, saving data!', data);
+                    IO.saveRecord(data);
+                }
             }
         },
 
@@ -138,6 +174,10 @@ jQuery(function($){
          * to the array of word data stored on the server.
          */
         currentRound: 0,
+
+        currentExpr: {},
+
+        wrongCount: 0,
 
         /* *************************************
          *                Setup                *
@@ -325,8 +365,15 @@ jQuery(function($){
              */
             newWord : function(data) {
                 // Insert the new word into the DOM
-                $('#hostWord').text(data.word);
+                App.currentExpr = data;
+                console.log('Data: ', App.currentExpr);
+                $('#hostWord').text(data.string);
                 App.doTextFit('#hostWord');
+
+                $.get('http://numbersapi.com/' + data.answer, function(fact) {
+                    fact = fact.replace(/[0-9]+ +is \w/g, 'T');
+                    $('#fact').text(fact);
+                });
 
                 // Update the data for the current round
                 App.Host.currentCorrectAnswer = data.answer;
@@ -342,30 +389,32 @@ jQuery(function($){
                 // This prevents a 'late entry' from a player whos screen has not
                 // yet updated to the current round.
                 if (data.round === App.currentRound){
-
                     // Get the player's score
                     var $pScore = $('#' + data.playerId);
-
+                    //var $pAnswer = $('button[value=' + data.answer +']');
+                    console.log('currentCorrectAnswer: ' + App.Host.currentCorrectAnswer);
+                    console.log('player\'s answer: ' + parseInt(data.answer));
                     // Advance player's score if it is correct
-                    if( App.Host.currentCorrectAnswer === data.answer ) {
+                    if( App.Host.currentCorrectAnswer === parseInt(data.answer) ) {
                         // Add 5 to the player's score
                         $pScore.text( +$pScore.text() + 5 );
 
                         // Advance the round
                         App.currentRound += 1;
-
                         // Prepare data to send to the server
-                        var data = {
-                            gameId : App.gameId,
-                            round : App.currentRound
-                        }
+                        data.gameId = App.gameId;
+                        data.round = App.currentRound;
+
+                        console.log('\n\n\n', data, '\n\n\n');
 
                         // Notify the server to start the next round.
-                        IO.socket.emit('hostNextRound',data);
+                        IO.socket.emit('hostNextRound', data);
 
                     } else {
                         // A wrong answer was submitted, so decrement the player's score.
                         $pScore.text( +$pScore.text() - 3 );
+                        //App.Player.setWrongAnswer(data.answer);
+                        IO.socket.emit('playerWrongAnswer', data);
                     }
                 }
             },
@@ -398,6 +447,8 @@ jQuery(function($){
                 }
                 App.doTextFit('#hostWord');
 
+                $('#fact').text('');
+
                 // Reset game data
                 App.Host.numPlayersInRoom = 0;
                 App.Host.isNewGame = true;
@@ -428,6 +479,8 @@ jQuery(function($){
              * The player's name entered on the 'Join' screen.
              */
             myName: '',
+
+            currentExpr: {},
 
             /**
              * Click handler for the 'JOIN' button
@@ -470,12 +523,14 @@ jQuery(function($){
 
                 // Send the player info and tapped word to the server so
                 // the host can check the answer.
+                console.log(App.currentExpr);
                 var data = {
                     gameId: App.gameId,
                     playerId: App.mySocketId,
                     answer: answer,
-                    round: App.currentRound
-                }
+                    round: App.currentRound,
+                    string: App.currentExpr.string
+                };
                 IO.socket.emit('playerAnswer',data);
             },
 
@@ -487,7 +542,7 @@ jQuery(function($){
                 var data = {
                     gameId : App.gameId,
                     playerName : App.Player.myName
-                }
+                };
                 IO.socket.emit('playerRestart',data);
                 App.currentRound = 0;
                 $('#gameArea').html("<h3>Waiting on host to start new game.</h3>");
@@ -526,9 +581,11 @@ jQuery(function($){
                 // Create an unordered list element
                 var $list = $('<ul/>').attr('id','ulAnswers');
 
+                App.currentExpr = data;
+
                 // Insert a list item for each word in the word list
                 // received from the server.
-                $.each(data.list, function(){
+                $.each(data.options, function(){
                     $list                                //  <ul> </ul>
                         .append( $('<li/>')              //  <ul> <li> </li> </ul>
                             .append( $('<button/>')      //  <ul> <li> <button> </button> </li> </ul>
@@ -537,11 +594,16 @@ jQuery(function($){
                                 .val(this)               //  <ul> <li> <button class='btnAnswer' value='word'> </button> </li> </ul>
                                 .html(this)              //  <ul> <li> <button class='btnAnswer' value='word'>word</button> </li> </ul>
                             )
-                        )
+                        );
                 });
 
                 // Insert the list onto the screen.
                 $('#gameArea').html($list);
+            },
+
+            markAnswerAsWrong : function(data) {
+                console.log(data.answer + ' is wrong!');
+                $('.btnAnswer[value=' + data.answer + ']').addClass('wrongAnswer').attr('checked', false);
             },
 
             /**
@@ -557,6 +619,11 @@ jQuery(function($){
                             .addClass('btn')
                             .addClass('btnGameOver')
                     );
+            },
+
+            setWrongAnswer : function(data) {
+                console.log('button[value=' + parseInt(data) +']')
+                $('button[value=' + parseInt(data) +']').addClass('wrongAnswer');
             }
         },
 
@@ -585,7 +652,7 @@ jQuery(function($){
 
             // Decrement the displayed timer value on each 'tick'
             function countItDown(){
-                startTime -= 1
+                startTime -= 1;
                 $el.text(startTime);
                 App.doTextFit('#hostWord');
 
