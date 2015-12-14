@@ -59,13 +59,6 @@ io.sockets.on('connection', function (socket) {
     agx.initGame(io, socket);
 });
 
-// io.sockets.on('difficultExpr', function (data) {
-//   data = data.expr;
-//   console.log("Making a post!");
-//   app.
-// });
-
-
 // Shamelessly borrowed from https://github.com/craigprotzel/Mashups/tree/master/10_The_Server_Plus_Storage
 app.post("/save", function (request, response) {
   console.log("Making a post!", request);

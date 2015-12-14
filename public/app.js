@@ -2,6 +2,25 @@
 jQuery(function($){    
     'use strict';
 
+    var correctSound;
+    var incorrectSound;
+
+    function preload () {
+        correctSound = loadSound('media/correct.wav');
+        correctSound.playMode('sustain');
+        correctSound.name = 'correct';
+
+        incorrectSound = loadSound('media/incorrect.wav');
+        correctSound.playMode('sustain');
+        correctSound.name = 'incorrect';
+    }
+
+    function setup () {
+    }
+
+    function draw () {
+    }
+
     /**
      * All the code relevant to Socket.IO is collected in the IO namespace.
      *
@@ -366,7 +385,7 @@ jQuery(function($){
             newWord : function(data) {
                 // Insert the new word into the DOM
                 App.currentExpr = data;
-                console.log('Data: ', App.currentExpr);
+                //console.log('Data: ', App.currentExpr);
                 $('#hostWord').text(data.string);
                 App.doTextFit('#hostWord');
 
@@ -405,8 +424,8 @@ jQuery(function($){
                         data.gameId = App.gameId;
                         data.round = App.currentRound;
 
-                        console.log('\n\n\n', data, '\n\n\n');
-
+                        //console.log('\n\n\n', data, '\n\n\n');
+                        // correctSound.play();
                         // Notify the server to start the next round.
                         IO.socket.emit('hostNextRound', data);
 
@@ -523,7 +542,7 @@ jQuery(function($){
 
                 // Send the player info and tapped word to the server so
                 // the host can check the answer.
-                console.log(App.currentExpr);
+                // console.log(App.currentExpr);
                 var data = {
                     gameId: App.gameId,
                     playerId: App.mySocketId,

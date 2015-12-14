@@ -5,10 +5,13 @@
        Lite : #ECFFE0
 Dark Purple : #A22FB0
 
+MS Orange: #FC6E51;
+Flat Orange: #FC6E51;
+
 */
 
 html, body {
-    background-color: #78BD4C;
+    background-color: #FFFFFF;
     height: 100%;
     width: 100%;
     margin: 0;
@@ -27,13 +30,13 @@ html, body {
     height: 100%;
     width: 49%;
     margin-bottom: 0;
-    color: #ECFFE0;
+    color: #FFFFFF;
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
     font-size: 2em;
     line-height: 1.2;
     text-align: center;
-    background-color: #8AD453;
+    background-color: #FC6E51;
     white-space: nowrap;
     vertical-align: middle;
     cursor: pointer;
@@ -45,6 +48,14 @@ html, body {
     user-select: none;
 }
 
+.btnCreateGame {
+    font-size: 1.5em;
+}
+
+.btnJoinGame {
+    font-size: 1.5em;
+}
+
 .btn:focus {
     outline: thin dotted #333;
     outline: 5px auto -webkit-focus-ring-color;
@@ -53,7 +64,7 @@ html, body {
 
 .btn:hover,
 .btn:focus {
-    color: #AE37B2;
+    background-color: #FF5722;
     text-decoration: none;
 }
 
@@ -100,7 +111,7 @@ html, body {
     text-align: center;
     width: 100%;
     font-family: 'Quicksand', sans-serif;
-    color: #ECFFE0;
+    color: #FC6E51;
     font-weight: 300;
 }
 
@@ -121,14 +132,14 @@ html, body {
 }
 
 .createGameWrapper .info{
-    color: #ECFFE0;
+    color: #333333;
     font-weight: 400;
     font-size: 2em;
     margin-top: 1.5em;
 }
 
 .createGameWrapper{
-    color: #AE37B2;
+    color: #FF5722;
     font-weight: 300;
 }
 
@@ -142,10 +153,10 @@ html, body {
     width: 200px;
     height: 60px;
     font-family: 'Quicksand', sans-serif;
-    color: #A22FB0;
+    color: #FF5722;
     font-weight: 300;
     font-size: 54px;
-    border: 1px dotted white;
+    border: 1px dotted #FC6E51;
     border-radius: 10px;
     background: transparent;
 }
@@ -169,7 +180,7 @@ html, body {
 
 .joinGameWrapper .info {
     font-size: 1.5em;
-    color: #ECFFE0;
+    color: #333333;
     height: 30%;
     padding-top: 1%;
 }
@@ -213,14 +224,23 @@ html, body {
 
 .btnAnswer {
     width: 100%;
-    border-bottom: 1px dotted white;
+    border-bottom: 1px dotted #FC6E51;
     font-weight: 400;
     font-size: 3em;
-    color: #AE37B2;
+    color: #FC6E51;
+    background-color: #FFFFFF;
+}
+
+.btnAnswer:hover{
+    background-color: #FFFFFF;
 }
 
 .wrongAnswer {
-    color: red !important;
+    background-color: #FFCCBC !important;
+}
+
+#hostWord {
+    color: #FF5722;
 }
 
 
@@ -293,12 +313,12 @@ html, body {
 
 .playerScore .score {
     text-align: center;
-    background-color: #A8FF56;
+    background-color: #FC6E51;
 }
 
 .playerScore .playerName {
     width: 77%;
-    background-color: #ECFFE0;
+    background-color: #FFCCBC;
 }
 
 #player1Score {

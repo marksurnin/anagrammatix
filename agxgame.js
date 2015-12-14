@@ -24,7 +24,7 @@ exports.initGame = function(sio, socket){
   gameSocket.on('playerAnswer', playerAnswer);
   gameSocket.on('playerRestart', playerRestart);
   gameSocket.on('playerWrongAnswer', playerWrongAnswer);
-}
+};
 
 /* *******************************
    *                             *
@@ -44,7 +44,7 @@ function hostCreateNewGame() {
 
   // Join the Room and wait for the players
   this.join(thisGameId.toString());
-};
+}
 
 /*
  * Two players have joined. Alert the host!
