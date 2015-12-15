@@ -21,6 +21,9 @@
 
     <!-- Main Title Screen that appears when the page loads for the first time -->
     <script id="intro-screen-template" type="text/template">
+        <div id="about">
+            <a href="https://github.com/marksurnin/anagrammatix" target="blank">About</a>
+        </div>
 
         <div class="titleWrapper">
 
@@ -106,10 +109,6 @@
     <!-- If Socket.IO is used with Express, then the /socket.io/ path will
         serve the proper Socket.IO javascript files used by the browser -->
     <script src="/socket.io/socket.io.js"></script>
-
-    <script src="/libs/p5.js"></script>
-    <script src="/libs/p5.dom.js"></script>
-    <script src="/libs/p5.sound.js"></script>
 
     <!-- app.js is where all the client-side Anagrammatix game logic -->
     <script src="app.js"></script>

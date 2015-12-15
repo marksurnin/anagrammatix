@@ -2,25 +2,6 @@
 jQuery(function($){    
     'use strict';
 
-    var correctSound;
-    var incorrectSound;
-
-    function preload () {
-        correctSound = loadSound('media/correct.wav');
-        correctSound.playMode('sustain');
-        correctSound.name = 'correct';
-
-        incorrectSound = loadSound('media/incorrect.wav');
-        correctSound.playMode('sustain');
-        correctSound.name = 'incorrect';
-    }
-
-    function setup () {
-    }
-
-    function draw () {
-    }
-
     /**
      * All the code relevant to Socket.IO is collected in the IO namespace.
      *
@@ -424,8 +405,6 @@ jQuery(function($){
                         data.gameId = App.gameId;
                         data.round = App.currentRound;
 
-                        //console.log('\n\n\n', data, '\n\n\n');
-                        // correctSound.play();
                         // Notify the server to start the next round.
                         IO.socket.emit('hostNextRound', data);
 

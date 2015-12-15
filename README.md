@@ -1,35 +1,43 @@
-# Anagrammatix
+# Mental Math
 
-A multi-player, multi-screen game built to experiment with Socket.IO and Node.js.
+A multi-player, multi-screen game built to experiment with Socket.IO and Node.js. This is a fork of [Anagrammatix](https://github.com/ericterpstra/anagrammatix)
 
-There is *sometimes* a working demo up at http://agx.terpstra.co:8888 - but no guarantees.
-
-## To Install
-
-1. Ensure Node.js is installed
-2. Clone this repository - `git clone https://github.com/ericterpstra/anagrammatix.git`
-3. Install the dependences:
-    1. `cd anagrammatix`
-    2. `npm install`
-4. Start the server: `node index.js`
-5. Visit http://127.0.0.1:8080 in a browser and click CREATE.
+There is a working demo up at [mental-math.herokuapp.com](mental-math.herokuapp.com).
 
 ## To Play
 
 ### Setup
-1. Ensure 3 devices are on a local network, or that the application server is accessable by 3 devices.
-2. Start the Anagrammatix application
-3. Visit http://your.ip.address:8080 on a PC, Tablet, SmartTV or other large screen device
-4. Click CREATE
-5. On a mobile device, visit http://your.ip.address:8080
-6. Click JOIN on the mobile device screen.
-7. Follow the on-screen instructions to join a game.
-8. Find an opponent and have him/her repeat steps 5-7 on another mobile device.
+1. Visit [mental-math.herokuapp.com](mental-math.herokuapp.com) on a PC, Tablet, SmartTV or other large screen device
+2. Click CREATE
+3. On a mobile device, visit [mental-math.herokuapp.com](mental-math.herokuapp.com).
+4. Click JOIN on the mobile device screen.
+5. Follow the on-screen instructions to join a game.
+6. Find an opponent and have him/her repeat steps 3-5 on another mobile device.
 
 ### Gameplay
-1. On the large screen (the game Host), a word will appear.
-2. On each players' devices, a list of words appear.
-3. The players must find an anagram of the word on the Host screen within the list of words on the mobile device.
-4. The player who taps the correct anagram first gets 5 points.
-5. Tapping an incorrect word will subtract 3 points.
+1. On the large screen (the game Host), a math expression will appear.
+2. On each players' devices, a list of possible answers will appear.
+3. The players must calculate the correct answer and select it from the list of answers on the mobile device.
+4. The player who taps the correct answer first gets 5 points.
+5. Tapping an incorrect answer will subtract 3 points.
+5.1. After 3 incorrect guesses, the expression is marked as 'difficult' and is added to a CouchDB database, accessible as an API at [mental-math.herokuapp.com/api](mental-math.herokuapp.com/api)
 6. The player with the most points after 10 rounds wins!
+
+
+### Why?
+
+I really wanted to experiment with the Socket.IO library and build something useful that takes advantage of its speed. I came across the Anagrammatix game and decided to use it as a boilerplate for my project. I left the core of the app as-is, but had to implement my own logic for generating the math expressions and several events.
+
+### Challenges
+
+This was probably the first project that I did not start from scratch. In my opinion, working with someone else's code is a crucial skill to have in the industry. In order to be able to implement new features, I needed to go thoroughly through the code and undestand how every function worked. With Socket.IO, I needed to track the state of the app, as the host and the client were communicating by events. It still took me a substantial amount of time to make this work, but now I am much more comfortable with using Socket.IO and am planning to seek out projects to contribute to that use this library.
+
+### Resources
+
+[Socket.IO](http://socket.io/)
+
+[FastClick.js](https://ftlabs.github.io/fastclick/) - elimiate the 300ms between a physical tap and the firing of the `click` event on mobile browsers.
+
+[TextFit.js](http://strml.github.io/examples/textFit.html) - quickly fit single and multi-line text to the width of its container.
+
+[Anagrammatix](https://github.com/ericterpstra/anagrammatix) - the original Anagrammatix game.

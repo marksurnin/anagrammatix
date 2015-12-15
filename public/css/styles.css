@@ -1,10 +1,5 @@
 /*
 
- Dark Green : #78BD4C
-  Mid Green : #A8FF56
-       Lite : #ECFFE0
-Dark Purple : #A22FB0
-
 MS Orange: #FC6E51;
 Flat Orange: #FC6E51;
 
@@ -33,7 +28,7 @@ html, body {
     color: #FFFFFF;
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
-    font-size: 2em;
+    font-size: 1.5em;
     line-height: 1.2;
     text-align: center;
     background-color: #FC6E51;
@@ -118,6 +113,23 @@ html, body {
 .buttons {
     width: 100%;
     text-align: center;
+}
+
+#about {
+    text-align: right;
+    margin-top: 20px;
+    margin-right: 30px;
+}
+
+#about a {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 400;
+    text-decoration: none;
+    color: #000000;
+}
+
+#about a:hover {
+    color: #FC6E51;
 }
 
 /* ******************************
