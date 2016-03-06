@@ -2,7 +2,7 @@
 
 A multi-player, multi-screen game built to experiment with Socket.IO and Node.js. This is a fork of [Anagrammatix](https://github.com/ericterpstra/anagrammatix)
 
-There is a working demo up at [mental-math.herokuapp.com](mental-math.herokuapp.com).
+There is a working demo up at [mental-math.herokuapp.com](https://mental-math.herokuapp.com).
 
 ## To Play
 
